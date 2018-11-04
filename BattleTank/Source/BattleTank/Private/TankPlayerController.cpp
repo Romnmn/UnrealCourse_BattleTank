@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "BattleTank.h"
+#include "Engine/World.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -18,9 +19,51 @@ void ATankPlayerController::BeginPlay()
 	}
 }
 
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+
+	AimTowardsCrosshair();
+	
+}
+
 ATank * ATankPlayerController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
+}
+
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (!GetControlledTank()) { return; }
+
+	FVector HitLocation;
+	if (GetSightRayHitLocation(HitLocation))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *HitLocation.ToString());
+	}
+}
+
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
+{
+	/*FHitResult OutHit;
+	const FVector Start;
+	const FVector End;
+
+	const FCollisionQueryParams Params;
+	const FCollisionResponseParams ResponseParam;
+
+	GetWorld()->LineTraceSingleByChannel(
+	(
+		OutHit,        //result
+		Start,    //start
+		End, //end
+		ECC_Visibility, //collision channel
+		Params,
+		ResponseParam
+	);*/
+
+	return false;
 }
 
 
