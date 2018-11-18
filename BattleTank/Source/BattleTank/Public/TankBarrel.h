@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "TankBarrel.generated.h"
 
 /**
@@ -19,7 +20,7 @@ public:
 	void Elevate(float RelativeSpeed);
 	
 private:
-	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 20;
+	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 5;
 
 	UPROPERTY(EditAnywhere, Category = Setup) float MinElevationDegrees = 0;
 
