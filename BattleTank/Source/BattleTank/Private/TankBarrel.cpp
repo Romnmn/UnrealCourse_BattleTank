@@ -2,12 +2,15 @@
 
 #include "TankBarrel.h"
 
+void UTankBarrel::SetBarrelMesh(UStaticMesh * MeshToSet)
+{
+	/*static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Content/Tank/tank_fbx_Barrel.tank_fbx_Barrel'"));
+	UStaticMesh* Asset = MeshAsset.Object;*/
+	SetStaticMesh(MeshToSet);
+}
+
 void UTankBarrel::Elevate(float RelativeSpeed)
 {
-	//auto Time = GetWorld()->GetTimeSeconds();
-
-	//UE_LOG(LogTemp, Warning, TEXT("%f Barrel Elevate() is called, D perS is %f"),Time, RelativeSpeed);
-
 	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, 1);
 	auto ElevationChange = RelativeSpeed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
 	auto RawNewElevation = RelativeRotation.Pitch + ElevationChange;
@@ -15,5 +18,3 @@ void UTankBarrel::Elevate(float RelativeSpeed)
 
 	SetRelativeRotation(FRotator(Elevation, 0, 0));
 }
-
-

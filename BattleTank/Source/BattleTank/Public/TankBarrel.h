@@ -18,6 +18,9 @@ class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
 public:
 	//-1 min, 1 max
 	void Elevate(float RelativeSpeed);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetBarrelMesh(UStaticMesh * MeshToSet);
 	
 private:
 	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 5;
