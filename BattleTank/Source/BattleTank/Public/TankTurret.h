@@ -22,7 +22,7 @@ public:
 	void SetTurretMesh(UStaticMesh * MeshToSet);
 	
 private:
-	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 10;
+	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 25;
 	UPROPERTY(EditAnywhere, Category = Setup) float MinRotationDegrees = -45;
 	UPROPERTY(EditAnywhere, Category = Setup) float MaxRotationDegrees = 45;
 	

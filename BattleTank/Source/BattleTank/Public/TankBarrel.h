@@ -23,7 +23,7 @@ public:
 	void SetBarrelMesh(UStaticMesh * MeshToSet);
 	
 private:
-	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 5;
+	UPROPERTY(EditAnywhere, Category = Setup) float MaxDegreesPerSecond = 10;
 
 	UPROPERTY(EditAnywhere, Category = Setup) float MinElevationDegrees = 0;
 
