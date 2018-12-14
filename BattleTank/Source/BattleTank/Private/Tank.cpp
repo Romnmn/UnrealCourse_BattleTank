@@ -47,16 +47,13 @@ void ATank::AimAt(FVector HitLocation)
 
 void ATank::Fire()
 {
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f tank is firing"), Time);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("tank is firing"));
-
 	if (!Barrel) { return; }
 
 	FActorSpawnParameters SpawnInfo;
 	FRotator myRot = Barrel->GetSocketRotation(FName("Projectile"));
 	FVector myLoc = Barrel->GetSocketLocation(FName("Projectile"));
 
-	GetWorld()->SpawnActor<AProjectile>(ProjectileBluebrint, myLoc, myRot, SpawnInfo);
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluebrint, myLoc, myRot, SpawnInfo);
+	Projectile->LaunchProjectile(LaunchSpeed);
 }
 
