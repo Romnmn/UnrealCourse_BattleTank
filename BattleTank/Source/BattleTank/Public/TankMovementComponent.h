@@ -29,6 +29,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void IntendRight(float Throw);
 	
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed);
+
 private:
 	UTankTrack * LeftTrack = nullptr;
 	UTankTrack * RightTrack = nullptr;
