@@ -19,9 +19,11 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-private:
+protected:
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	ATank * GetControlledTank() const;
 
+private:
 	UPROPERTY(EditDefaultsOnly) 
 	float CrossHairXLocation = 0.5f, CrossHairYLocation = 0.3333f;
 	

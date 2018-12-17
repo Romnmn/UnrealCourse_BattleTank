@@ -6,12 +6,20 @@
 #include "Components/ActorComponent.h"
 #include "Components/StaticMeshComponent.h" 
 #include "Kismet/GameplayStatics.h"
-#include "TankBarrel.h"
-#include "TankTurret.h"
+//#include "TankBarrel.h"
+//#include "TankTurret.h"
 #include "TankAimingComponent.generated.h"
 
-//class UTankBarrel;
-//class UTankTurret;
+UENUM()
+enum class EFiringStatus : uint8
+{
+	Locked,
+	Aiming,
+	Reloading
+};
+
+class UTankBarrel;
+class UTankTurret;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -21,6 +29,9 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadOnly, Category = Setup)
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
+
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -29,11 +40,10 @@ public:
 	void SetBarrelReference(UTankBarrel * BarrelToSet);
 	void SetTurretReference(UTankTurret * TurretToSet);
 
-	//TODO Set turret reference
-
 private:
 	UTankBarrel * Barrel = nullptr;
 	UTankTurret * Turret = nullptr;
+
 	void MoveBarrelTowards(FVector);
 	void MoveTurretTowards(FVector);
 	

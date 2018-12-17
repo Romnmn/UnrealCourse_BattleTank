@@ -3,6 +3,7 @@
 #include "TankMovementComponent.h"
 #include "Tank.h"
 #include "TankTrack.h"
+#include "Runtime/Core/Public/Math/Vector.h"
 
 void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
@@ -17,7 +18,7 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 	RightTrack->SetThrottle(Throw);
 }
 
-void UTankMovementComponent::IntendRight(float Throw)
+void UTankMovementComponent::IntendTurnRight(float Throw)
 {
 	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
@@ -26,8 +27,14 @@ void UTankMovementComponent::IntendRight(float Throw)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	Velocity = MoveVelocity;
-	
-	auto TankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s velocity is %s"), *TankName, *MoveVelocity.ToString());
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+
+	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
+	IntendMoveForward(ForwardThrow);
+
+	auto RightThrow = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
+	IntendTurnRight(RightThrow);
+	UE_LOG(LogTemp, Warning, TEXT("%f "), RightThrow);
+
 }

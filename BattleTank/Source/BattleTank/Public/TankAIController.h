@@ -20,5 +20,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditDefaultsOnly, Category = AILogic)
-	float AcceptanceRadius = 3000;
+	float AcceptanceRadius = 1000;
 };
