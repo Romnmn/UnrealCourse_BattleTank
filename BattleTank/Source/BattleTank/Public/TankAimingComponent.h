@@ -35,16 +35,17 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Initialize(UTankBarrel* TankBarrelToSet, UTankTurret* TankTurretToSet);
+
 	void AimAt(FVector HitLocation, float LaunchSpeed);
+
 	UTankAimingComponent();	
-	void SetBarrelReference(UTankBarrel * BarrelToSet);
-	void SetTurretReference(UTankTurret * TurretToSet);
 
 private:
 	UTankBarrel * Barrel = nullptr;
 	UTankTurret * Turret = nullptr;
 
-	void MoveBarrelTowards(FVector);
-	void MoveTurretTowards(FVector);
+	void MoveBarrelAndTurretTowards(FVector); //MoveBarrelTowards
 	
 };
