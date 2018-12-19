@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h" //TODO remove this shit
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "Engine/GameEngine.h"
@@ -13,24 +12,14 @@ ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	
-	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("AimingComponent"));
-	//TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("MovementComponent"));
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	//TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
-}
 
-/*void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}*/
+}
 
 void ATank::Fire()
 {
