@@ -1,11 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
-#include "GameFramework/Pawn.h"
-#include "TankBarrel.h"
-#include "Projectile.h"
-#include "Engine/GameEngine.h"
-
 
 // Sets default values
 ATank::ATank()
@@ -19,24 +14,5 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
-}
-
-void ATank::Fire()
-{
-	if (!ensure(Barrel)) { return; }
-
-	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (Barrel && isReloaded)
-	{
-		LastFireTime = GetWorld()->GetTimeSeconds();
-
-		FActorSpawnParameters SpawnInfo;
-		FRotator myRot = Barrel->GetSocketRotation(FName("Projectile"));
-		FVector myLoc = Barrel->GetSocketLocation(FName("Projectile"));
-
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluebrint, myLoc, myRot, SpawnInfo);
-		Projectile->LaunchProjectile(LaunchSpeed);
-
-	}
 }
 

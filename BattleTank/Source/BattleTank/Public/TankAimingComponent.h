@@ -6,8 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "Components/StaticMeshComponent.h" 
 #include "Kismet/GameplayStatics.h"
-//#include "TankBarrel.h"
-//#include "TankTurret.h"
 #include "TankAimingComponent.generated.h"
 
 UENUM()
@@ -20,6 +18,7 @@ enum class EFiringStatus : uint8
 
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -42,13 +41,24 @@ public:
 
 	UTankAimingComponent();	
 
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void Fire();
+
 private:
 	UTankBarrel * Barrel = nullptr;
 	UTankTurret * Turret = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 4000;
+	float LastFireTime = 0;
 
 	void MoveBarrelAndTurretTowards(FVector); //MoveBarrelTowards
 	
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBluebrint;
+
 };

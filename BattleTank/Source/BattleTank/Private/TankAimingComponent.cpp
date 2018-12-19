@@ -4,6 +4,9 @@
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "GameFramework/Pawn.h"
+#include "Projectile.h"
+
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -73,4 +76,23 @@ void UTankAimingComponent::MoveBarrelAndTurretTowards(FVector AimDirection)
 
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel)) { return; }
+
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (Barrel && isReloaded)
+	{
+		LastFireTime = GetWorld()->GetTimeSeconds();
+
+		FActorSpawnParameters SpawnInfo;
+		FRotator myRot = Barrel->GetSocketRotation(FName("Projectile"));
+		FVector myLoc = Barrel->GetSocketLocation(FName("Projectile"));
+
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluebrint, myLoc, myRot, SpawnInfo);
+		Projectile->LaunchProjectile(LaunchSpeed);
+
+	}
 }
