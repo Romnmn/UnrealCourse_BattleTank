@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/NavMovementComponent.h"
-//#include "Tank.h"
-//#include "TankTrack.h"
 #include "TankMovementComponent.generated.h"
 
 class ATank;
