@@ -2,7 +2,7 @@
 
 #include "Tank.h"
 #include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h"
+#include "TankAimingComponent.h" //TODO remove this shit
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "Engine/GameEngine.h"
@@ -23,14 +23,14 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	//TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 }
 
-void ATank::AimAt(FVector HitLocation)
+/*void ATank::AimAt(FVector HitLocation)
 {
 	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}
+}*/
 
 void ATank::Fire()
 {

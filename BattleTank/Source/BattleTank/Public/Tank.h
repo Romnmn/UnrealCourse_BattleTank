@@ -8,7 +8,7 @@
 //class UTankBarrel;
 class AProjectile;
 class UTankBarrel;
-class UTankAimingComponent;
+class UTankAimingComponent; //TODO remove this shit
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -20,14 +20,14 @@ public:
 
 	//virtual void Tick(float DeltaTime) override;
 
-	void AimAt(FVector HitLocation);
+	//void AimAt(FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void Fire();
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent * TankAimingComponent = nullptr;
+	UTankAimingComponent * TankAimingComponent = nullptr; //TODO remove this shit
 
 	/*UPROPERTY(BlueprintReadOnly)
 	UTankMovementComponent  * TankMovementComponent = nullptr;*/
