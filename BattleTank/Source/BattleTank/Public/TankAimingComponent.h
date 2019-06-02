@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = Setup)
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBluebrint;
+
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -58,7 +61,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3;
 
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
-	TSubclassOf<AProjectile> ProjectileBluebrint;
+
 
 };

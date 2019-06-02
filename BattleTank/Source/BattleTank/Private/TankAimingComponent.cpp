@@ -82,6 +82,9 @@ void UTankAimingComponent::Fire()
 {
 	if (!ensure(Barrel)) { return; }
 
+	UE_LOG(LogTemp, Warning, TEXT("!!!!!!"));
+
+
 	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
 	if (Barrel && isReloaded)
 	{
