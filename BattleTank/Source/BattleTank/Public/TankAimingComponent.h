@@ -16,6 +16,7 @@ enum class EFiringStatus : uint8
 	Reloading
 };
 
+
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -54,13 +55,15 @@ private:
 	float LastFireTime = 0;
 
 	void MoveBarrelAndTurretTowards(FVector); //MoveBarrelTowards
+	bool IsBarrelMoving();
 	
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 4000;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3;
-
-
+	
+	//test
+	FVector AimDirection;
 
 };

@@ -13,7 +13,7 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
 }
@@ -29,16 +29,26 @@ void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	LastFireTime = GetWorld()->GetTimeSeconds();
 }
 
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	
+	if (GetWorld()->GetTimeSeconds() - LastFireTime <= ReloadTimeInSeconds)
+	{
+		FiringStatus = EFiringStatus::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		FiringStatus = EFiringStatus::Aiming;
+	}
+	else
+	{
+		FiringStatus = EFiringStatus::Locked;
+	}
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -61,7 +71,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	//Calculate OutLaunchVelocity
 	if (bHaveAimSolution)
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		/*auto*/ AimDirection = OutLaunchVelocity.GetSafeNormal();
+		
 		MoveBarrelAndTurretTowards(AimDirection);
 	}
 }
@@ -78,17 +89,21 @@ void UTankAimingComponent::MoveBarrelAndTurretTowards(FVector AimDirection)
 	Turret->Rotate(DeltaRotator.Yaw);
 }
 
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+	return !(AimDirection.Equals(Barrel->GetForwardVector(), 0.1));
+}
+
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel)) { return; }
-
-	UE_LOG(LogTemp, Warning, TEXT("!!!!!!"));
-
-
-	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (Barrel && isReloaded)
+	if (Barrel && FiringStatus != EFiringStatus::Reloading )
 	{
+		if (!ensure(ProjectileBluebrint)) { return; }
+		if (!ensure(Barrel)) { return; }
+
 		LastFireTime = GetWorld()->GetTimeSeconds();
+		//FiringStatus = EFiringStatus::Reloading;
 
 		FActorSpawnParameters SpawnInfo;
 		FRotator myRot = Barrel->GetSocketRotation(FName("Projectile"));
