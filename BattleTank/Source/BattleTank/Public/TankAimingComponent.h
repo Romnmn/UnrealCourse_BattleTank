@@ -48,6 +48,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void Fire();
 
+	EFiringStatus GetFiringState() const;
+
 private:
 	UTankBarrel * Barrel = nullptr;
 	UTankTurret * Turret = nullptr;

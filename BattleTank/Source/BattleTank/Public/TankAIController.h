@@ -18,6 +18,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
+protected:
 	UPROPERTY(EditDefaultsOnly, Category = AILogic)
 	float AcceptanceRadius = 1000;
 };
