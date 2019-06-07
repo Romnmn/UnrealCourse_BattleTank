@@ -65,11 +65,12 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	CollisionMesh->DestroyComponent();
 
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::Destroy, DestroyDelay, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
 }
 
-void AProjectile::Destroy()
+void AProjectile::OnTimerExpire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%DESTROY PROJCTILE"));
+	//UE_LOG(LogTemp, Warning, TEXT("%DESTROY PROJCTILE"));
+	Destroy();
 }
 

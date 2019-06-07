@@ -39,7 +39,7 @@ private:
 				const FHitResult& Hit);
 
 	UFUNCTION()
-	void Destroy();
+	void OnTimerExpire();
 
 	UProjectileMovementComponent* ProjectileMovement;
 
