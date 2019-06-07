@@ -37,11 +37,16 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+	//auto Test = FPlatformTime::Seconds() - LastFireTime;
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), Test);
+
+
+
 	if (RoundsLeft <= 0)
 	{
 		FiringState = EFiringState::OutOfAmmo;
 	}
-	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	else if ((/*FPlatformTime::Seconds() - LastFireTime*/GetWorld()->GetTimeSeconds()-LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringState = EFiringState::Reloading;
 	}

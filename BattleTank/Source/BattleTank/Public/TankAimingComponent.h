@@ -67,10 +67,10 @@ private:
 	float LaunchSpeed = 4000;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float ReloadTimeInSeconds = 3;
+	float ReloadTimeInSeconds = 1;
 	
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	int RoundsLeft = 3;
+	int RoundsLeft = 50;
 
 	//test
 	FVector AimDirection;
