@@ -2,6 +2,33 @@
 
 #include "Tank.h"
 
+float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	//CurrentHealth -= Damage;
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), CurrentHealth);
+	
+	int DamagePoints = FPlatformMath::RoundToInt(DamageAmount);
+	int DamageToApply = FMath::Clamp(DamagePoints, 0, CurrentHealth);
+
+	CurrentHealth -= DamageToApply;
+
+	if (CurrentHealth <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tank died"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%f %i"), DamageAmount, DamageToApply)
+	}
+
+	return DamageToApply;
+}
+
+float ATank::GetHealthPercent() const
+{
+	return (float)CurrentHealth / (float)StartingHealth;
+}
+
 // Sets default values
 ATank::ATank()
 {
