@@ -32,6 +32,6 @@ private:
 	int StartingHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Healths")
-	int CurrentHealth = StartingHealth;
+	int CurrentHealth;
 
 };

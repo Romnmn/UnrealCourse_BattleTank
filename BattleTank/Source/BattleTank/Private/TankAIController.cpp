@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "TankAimingComponent.h"
 #include "Tank.h"
+#include "GameFramework/Pawn.h"
 
 void ATankAIController::BeginPlay()
 {
@@ -45,7 +46,9 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::OnTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AI controller on tank death"));
+	//UE_LOG(LogTemp, Warning, TEXT("AI controller on tank death"));
+	if (!GetPawn()) { return; }
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
 
 
