@@ -9,28 +9,53 @@ ASprungWheel::ASprungWheel()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	RootComponent = Mass;
-	Mass->SetNotifyRigidBodyCollision(true);
-	Mass->SetSimulatePhysics(true);
+
+	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("PhysicsConstraint"));
+	RootComponent = MassWheelConstraint;
+
+	//Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
+	//Mass->AttachToComponent(MassWheelConstraint, FAttachmentTransformRules::KeepRelativeTransform);
+	//Mass->SetNotifyRigidBodyCollision(true);
+	//Mass->SetSimulatePhysics(true);
 
 	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->AttachToComponent(Mass, FAttachmentTransformRules::KeepRelativeTransform);
+	Wheel->AttachToComponent(MassWheelConstraint, FAttachmentTransformRules::KeepRelativeTransform);
 	Wheel->SetNotifyRigidBodyCollision(true);
 	Wheel->SetSimulatePhysics(true);
 
-	PhysicsConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("PhysicsConstraint"));
-	PhysicsConstraint->AttachToComponent(Mass, FAttachmentTransformRules::KeepRelativeTransform);
+	//Settup
 
-	PhysicsConstraint->SetConstrainedComponents(Mass, "", Wheel, "");
+	//MassWheelConstraint->SetConstrainedComponents(Mass, "", Wheel, "");
 
+	MassWheelConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Locked, 0);
+	MassWheelConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Locked, 0);
+	MassWheelConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 0);
+
+	MassWheelConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	MassWheelConstraint->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	MassWheelConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+
+	//end settup
 }
 
 // Called when the game starts or when spawned
 void ASprungWheel::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SetConstraint();
+}
+
+void ASprungWheel::SetConstraint()
+{
+	if (GetAttachParentActor())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Parrent %s"), *GetAttachParentActor()->GetName());
+
+		UPrimitiveComponent* BodyRoot = Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent());
+		if (!BodyRoot) { return; }
+		MassWheelConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Wheel, NAME_None);
+	}
 }
 
 // Called every frame
