@@ -10,32 +10,39 @@ ASprungWheel::ASprungWheel()
 	PrimaryActorTick.bCanEverTick = true;
 
 
-	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("PhysicsConstraint"));
-	RootComponent = MassWheelConstraint;
+	AxisToMassConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("AxisPhysicsConstraint"));
+	RootComponent = AxisToMassConstraint;
 
-	//Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	//Mass->AttachToComponent(MassWheelConstraint, FAttachmentTransformRules::KeepRelativeTransform);
-	//Mass->SetNotifyRigidBodyCollision(true);
-	//Mass->SetSimulatePhysics(true);
+	Axis = CreateDefaultSubobject<USphereComponent>(FName("Axis"));
+	Axis->AttachToComponent(AxisToMassConstraint, FAttachmentTransformRules::KeepRelativeTransform);
+	Axis->SetNotifyRigidBodyCollision(false);
+	Axis->SetSimulatePhysics(true);
 
-	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->AttachToComponent(MassWheelConstraint, FAttachmentTransformRules::KeepRelativeTransform);
+	WheelToAxisConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("WheelPhysicsConstraint"));
+	WheelToAxisConstraint->AttachToComponent(Axis, FAttachmentTransformRules::KeepRelativeTransform);
+
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
+	Wheel->AttachToComponent(WheelToAxisConstraint, FAttachmentTransformRules::KeepRelativeTransform);
 	Wheel->SetNotifyRigidBodyCollision(true);
 	Wheel->SetSimulatePhysics(true);
 
-	//Settup
+	//axis
+	AxisToMassConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Locked, 0);
+	AxisToMassConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Locked, 0);
+	AxisToMassConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 0);
 
-	//MassWheelConstraint->SetConstrainedComponents(Mass, "", Wheel, "");
+	AxisToMassConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	AxisToMassConstraint->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	AxisToMassConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
 
-	MassWheelConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Locked, 0);
-	MassWheelConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Locked, 0);
-	MassWheelConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 0);
+	//wheel
+	WheelToAxisConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Locked, 0);
+	WheelToAxisConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Locked, 0);
+	WheelToAxisConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Locked, 0);
 
-	MassWheelConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
-	MassWheelConstraint->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
-	MassWheelConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
-
-	//end settup
+	WheelToAxisConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	WheelToAxisConstraint->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Free, 0);
+	WheelToAxisConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
 }
 
 // Called when the game starts or when spawned
@@ -54,7 +61,8 @@ void ASprungWheel::SetConstraint()
 
 		UPrimitiveComponent* BodyRoot = Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent());
 		if (!BodyRoot) { return; }
-		MassWheelConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Wheel, NAME_None);
+		AxisToMassConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Axis, NAME_None);
+		WheelToAxisConstraint->SetConstrainedComponents(Axis, NAME_None, Wheel, NAME_None);
 	}
 }
 
