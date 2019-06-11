@@ -2,6 +2,8 @@
 
 #include "TankTrack.h"
 #include "Engine/World.h" //my
+#include "SprungWheel.h" //Components/SceneComponent.cpp
+#include "SpawnPoint.h"
 
 UTankTrack::UTankTrack()
 {
@@ -12,7 +14,7 @@ UTankTrack::UTankTrack()
 void UTankTrack::BeginPlay()
 {
 	Super::BeginPlay();
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+	//OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 
 }
 
@@ -30,25 +32,50 @@ void UTankTrack::SetTrackMesh(UStaticMesh * MeshToSet)
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("aaaaaaaaaaaa"));
-	DriveTrack();
-	ApplySidewaysForce();
-	CurrentThrottle = 0;
+	//DriveTrack();
+	//ApplySidewaysForce();
+	//CurrentThrottle = 0;
 }
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
+	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
+	DriveTrack(CurrentThrottle);
 }
 
-void UTankTrack::DriveTrack()
+void UTankTrack::DriveTrack(float CurrentThrottle)
 {
-	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-
-	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+	auto ForceApplied = CurrentThrottle * TrackMaxDrivingForce;
+	auto Wheels = GetWheels();
+	auto ForcePerWheel = ForceApplied / (FMath::Clamp<int>(Wheels.Num(), 1, Wheels.Num()+1));
+	for(ASprungWheel * Wheel :Wheels)
+	{
+		Wheel->AddDrivingForce(ForcePerWheel);
+	}
 }
+TArray<ASprungWheel*> UTankTrack::GetWheels() const
+{
+	TArray<ASprungWheel*> ResultArray;
+	TArray<USceneComponent*> Children;
+	GetChildrenComponents(true, Children);
 
+	for (USceneComponent* Child : Children)
+	{
+		auto SpawnPointChild = Cast<USpawnPoint>(Child);
+		if (!SpawnPointChild) continue;
+
+		AActor* SpawnedChild = SpawnPointChild->GetSpawnedActor();
+		auto SprungWheel = Cast<ASprungWheel>(SpawnedChild);
+		if (!SprungWheel) continue;
+
+		ResultArray.Add(SprungWheel);
+
+		//ResultArray.Add(Cast<ASprungWheel>(SpawnPointChild->GetSpawnedActor()));
+	}
+
+	return (ResultArray);
+}
+/*
 void UTankTrack::ApplySidewaysForce()
 {
 	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
@@ -61,5 +88,5 @@ void UTankTrack::ApplySidewaysForce()
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
 	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2;
 	TankRoot->AddForce(CorrectionForce);
-}
+}*/
 

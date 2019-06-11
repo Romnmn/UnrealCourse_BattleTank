@@ -45,6 +45,11 @@ ASprungWheel::ASprungWheel()
 	WheelToAxisConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
 }
 
+void ASprungWheel::AddDrivingForce(float ForceMagnitude)
+{
+	Wheel->AddForce(Axis->GetForwardVector() * ForceMagnitude);
+}
+
 // Called when the game starts or when spawned
 void ASprungWheel::BeginPlay()
 {

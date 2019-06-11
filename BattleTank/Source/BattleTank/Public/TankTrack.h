@@ -20,7 +20,7 @@ public:
 	virtual void BeginPlay() override;
 	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void ApplySidewaysForce();
+	//void ApplySidewaysForce();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTrackMesh(UStaticMesh * MeshToSet);
@@ -28,7 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 
-	void DriveTrack();
+	void DriveTrack(float CurrentThrottle);
 
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 40000000;
@@ -37,5 +37,5 @@ private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	float CurrentThrottle = 0;
+	TArray<class ASprungWheel*> GetWheels() const;
 };

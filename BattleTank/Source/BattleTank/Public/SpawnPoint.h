@@ -6,7 +6,6 @@
 #include "Components/SceneComponent.h"
 #include "SpawnPoint.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API USpawnPoint : public USceneComponent
 {
@@ -26,5 +25,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Setup)
 	TSubclassOf<AActor> SpawnClass;
+
+	AActor* GetSpawnedActor() const;
+
+private:
+
+	UPROPERTY()
+	AActor* SpawnedActor;
 		
 };
