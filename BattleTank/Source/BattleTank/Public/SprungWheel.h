@@ -30,7 +30,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 private:
+
+	void ApplyForce();
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* Axis;
@@ -44,4 +49,5 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* WheelToAxisConstraint;
 
+	float TotalForceMagnitudeThisFrame;
 };
